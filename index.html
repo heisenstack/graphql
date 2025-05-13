@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="static/css/style.css">
+    <title>Graphql</title>
+</head>
+<body>
+    <section class="login-section">
+        <form class="login-form">
+            <h1 class="title">Graphql Login</h1>
+
+            <div class="username-field">
+                <label for="username">Username:</label>
+                <input type="text" id="username">
+            </div>
+
+            <div class="password-field">
+                <label for="password">Password:</label>
+                <input type="password" id="password">
+            </div>
+
+            <p class="error-message"></p>
+            <button id="login-btn" type="submit">Login</button>
+        </form>
+    </section>
+    <section class="user-profile">
+        <div class="header">
+            <h4 id="welcome-message"></h4>
+            <button id="logout-btn">Logout</button>
+            <div class="user-card">
+                <h1 id="level-display"></h1>
+
+                <h1 id="full-name"></h1>
+            </div>
+        </div>
+        <div class="user-data">
+            <div class="audit">
+                <h1>Audit</h1>
+                <div class="circle"></div>
+                <div class="total">
+                    <div class="totaldown">
+                        <h3>Total Down &darr;</h3>
+                        <h2 id="totaldown"></h2>
+                    </div>
+                    <div class="totalup">
+                        <h3>Total Up &uarr;</h3>
+                        <h2 id="totalup"></h2>
+                    </div>
+                </div>
+                <h3 id="audit-ratio"></h3>
+                <p id="audit-ratio-note"></p>
+            </div>
+            <div class="top-projects">
+            </div>
+        </div>
+        <div class="skills-set">
+        </div>
+    </section>
+
+    <script type="module" src="static/js/main.js"></script>
+</body>
+</html>

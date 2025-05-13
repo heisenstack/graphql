@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Reddit+Sans:wght@200..900&display=swap');
+
+
+* {
+    font-family: "Pixelify Sans", serif;
+
+}
+
+body {
+    /* height: 100vh; */
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: indigo;
+}
+
+.login-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 400px;
+    height: 400px;
+    padding: 20px;
+    margin: 30px;
+    background-color: white;
+    box-shadow: 2px 10px rgb(0, 0, 0);
+    /* display: none; */
+}
+.title {
+    font-size: 32px;
+    color: indigo;
+    font-weight: 700;
+    text-align: center;
+}
+
+#username, #password {
+    border-radius: 0;
+    border: 1px solid indigo;
+    background-color: rgb(199, 161, 226);
+    width: 60%;
+    height: 20px;
+}
+.username-field, .password-field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 8px;
+}
+.error-message {
+    margin: 8px;
+    font-size: 18px;
+    color: tomato;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#login-btn {
+    color: indigo;
+    border-radius:0 ;
+    border: 1px solid indigo;
+    background-color: rgb(199, 161, 226);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+#login-btn:hover {
+    border: 1px solid rgb(199, 161, 226);
+    background-color: indigo;
+    color: white;
+}
+
+
+#logout-btn {
+    margin: 8px;
+    font-size: 16px;
+    font-weight: 800;
+    background-color: white;
+    color: crimson;
+    border: none;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    box-shadow: 1px 5px rgb(0, 0, 0);
+    cursor: pointer;
+    transition: ease-out 0.4s;
+}
+
+#logout-btn:hover {
+    background-color: crimson;
+    color: white;
+}
+
+.user-profile {
+    display: none;
+    width: 80%;
+    max-width: 1200px;
+    flex-direction: column;
+    gap: 30px;
+
+}
+
+#welcome-message {
+    margin: 8px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    font-weight: 200;
+}
+#full-name {
+    padding: 4px;
+    background-color: white;
+    color: indigo;
+    font-size: 44px;
+    font-weight: 600;
+    text-align: center;
+}
+#level-display {
+    padding: 4px;
+    background-color: white;
+    color: indigo;
+    font-size: 44px;
+    font-weight: 600;
+}
+
+
+.user-data {
+display: flex;
+gap: 30px;
+justify-content: space-between;
+
+}
+
+.audit {
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    box-shadow: 2px 8px rgb(0, 0, 0);
+}
+
+#audit-ratio {
+    font-size: 32px;
+    margin: 8px;
+}
+.top-projects {
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    box-shadow: 2px 8px rgb(0, 0, 0);
+    padding: 12px 0 12px 0;
+
+}
+
+.skills-set {
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+    box-shadow: 2px 8px rgb(0, 0, 0);
+    overflow-x: auto; 
+    width: 100%;
+}
+
+.skills-set svg {
+    max-width: 100%;
+    height: auto;
+    width: 100%;
+}
+
+#audit-ratio-note {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.top-projects {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.project {
+    font-size: 20px;
+    margin: 4px;
+}
+
+.time-stamp {
+    font-weight: 300;
+    margin-top: 4px;
+    /* margin-bottom: px; */
+}
+
+
+.total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+#totaldown, #totalup {
+    font-size: 24px;
+    margin: 4px;
+}
+
+.total h3, .total h3 {
+    font-size: 20px;
+    margin: 4px;
+}
+
+#totaldown {
+    color: red;
+}
+
+#totalup {
+    color: #3498db;
+}
+
+@media screen and (max-width: 1200px) {
+    .skills-set svg text {
+        font-size: 12px; 
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .skills-set {
+        padding: 10px;
+    }
+
+    .skills-set svg text {
+        font-size: 10px; 
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .skills-set {
+        padding: 5px;
+    }
+
+    .skills-set svg {
+        min-width: 800px; 
+    }
+}
+@media screen and (max-width: 1024px) {
+    .user-data {
+        flex-direction: column;
+    }
+    
+    .audit, .top-projects {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        margin: 10px;
+        padding: 10px;
+    }
+    
+    .login-form {
+        width: 90%;
+        height: auto;
+        padding: 15px;
+        margin: 15px;
+    }
+    
+    .user-profile {
+        width: 95%;
+    }
+    
+    #full-name {
+        font-size: 32px;
+    }
+    
+    .total {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .username-field, .password-field {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    #username, #password {
+        width: 80%;
+    }
+    
+    #full-name {
+        font-size: 24px;
+    }
+    
+    .project {
+        font-size: 16px;
+    }
+}
