@@ -1,4 +1,13 @@
-export function generateCircleChart(totalUp, totalDown) {
+function drawCircleChart(user) {
+  const chartContainer = document.getElementById("circleChart");
+  const circleChart = generateCircleChart(
+    user.info.totalUp,
+    user.info.totalDown
+  );
+  chartContainer.innerHTML = "";
+  chartContainer.appendChild(circleChart);
+}
+function generateCircleChart(totalUp, totalDown) {
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const svgNamespace = "http://www.w3.org/2000/svg";
@@ -26,7 +35,7 @@ export function generateCircleChart(totalUp, totalDown) {
   downCircle.setAttribute("cx", 90);
   downCircle.setAttribute("cy", 90);
   downCircle.setAttribute("r", radius);
-  downCircle.setAttribute("stroke", "red");
+  downCircle.setAttribute("stroke", "#ef4444");
   downCircle.setAttribute("stroke-width", 20);
   downCircle.setAttribute("fill", "transparent");
   downCircle.setAttribute(
@@ -40,7 +49,7 @@ export function generateCircleChart(totalUp, totalDown) {
   upCircle.setAttribute("cx", 90);
   upCircle.setAttribute("cy", 90);
   upCircle.setAttribute("r", radius);
-  upCircle.setAttribute("stroke", "#3498db");
+  upCircle.setAttribute("stroke", "#10b981");
   upCircle.setAttribute("stroke-width", 20);
   upCircle.setAttribute("fill", "transparent");
   upCircle.setAttribute(
@@ -52,3 +61,5 @@ export function generateCircleChart(totalUp, totalDown) {
 
   return svg;
 }
+
+export { drawCircleChart };

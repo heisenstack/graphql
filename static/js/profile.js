@@ -1,130 +1,194 @@
-import { generateSkillChart } from "./charts/skillChart.js";
-import { generateCircleChart } from "./charts/circleChart.js";
-import { formatting, generateTopProjects } from "./utils.js";
+import { drawCircleChart } from "./charts/circleChart.js";
+import { drawSkillsGraph } from "./charts/skillChart.js";
+import { logout } from "./auth.js";
+import { formatting, totalXp } from "./utils.js";
+import { API_Global, query } from "./variables.js";
 
-const API_GRAPHQL =
-  "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
+let user = {};
+const body = document.body;
 
-export async function loadProfile(token) {
-  const query = `{
-        user {
-            id
-            login
-            firstName
-            lastName
-            email
-            campus
-            auditRatio
-            totalUp
-            totalDown
-            modules: transactions(
-                where: { 
-                    event: { object: { type: { _eq: "module" } } }, 
-                    type: { _eq: "xp" } 
-                }
-                order_by: { amount: desc}
-                limit: 5
-            ) {
-                object {
-                    name
-                }
-                type
-                createdAt
-                amount
-            }
-            levels: transactions(
-                where: {eventId: {_eq: 41}, type: {_eq: "level"}}
-                order_by: {amount: desc}
-                limit: 1
-            ) {
-                amount
-            }
-            skills: transactions(
-                where: { type: { _like: "skill_%" } }
-                order_by: { amount: desc }
-                limit: 5
-            ) {
-                id
-                type
-                amount
-                createdAt
-            }
-                    }
-    }`;
+async function userPage() {
+  await graphQlUser();
 
-  try {
-    const response = await fetch(API_GRAPHQL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ query: query }),
-    });
+  let profileDiv = `
+    <div class="app-container">
+    <div class="sidebar">
+    <div class="sidebar-header">
+    <div class="user-avatar">
+    <span>${user.info.firstName.charAt(0)}${user.info.lastName.charAt(0)}</span>
+    </div>
+    </div>
+    
+    <div class="sidebar-content">
+    <div class="user-info-item">
+    <label>Login:</label>
+    <span>${user.info.login}</span>
+    </div>
+    
+    <div class="user-info-item">
+    <label>First Name:</label>
+    <span>${user.info.firstName} ${user.info.lastName}</span>
+    </div>
 
-    if (!response.ok) {
-      throw new Error(response.message);
-    }
+    
+    <div class="user-info-item">
+    <label>Campus:</label>
+    <span>${user.info.campus || ""}</span>
+    </div>
+    
+    <div class="user-info-item highlight">
+    <label>Total XP:</label>
+    <span>${
+      formatting(user.totalXp) || "0 B"
+      //   user.totalXp > 1000
+      //     ? Math.round(user.totalXp / 1000) + " kB"
+      //     : Math.trunc(user.totalXp) + " B"
+    }</span>
+    </div>
+    
+    <div class="user-info-item highlight">
+    <label>Current Level:</label>
+    <span>${user.level || ""}</span>
+    </div>
+    </div>
+    
+    <button id="logoutBtn" class="logout-btn">
+    <img src="./static/js/icons/logout.png" alt="logout"/>
+    Logout
+    </button>
+    </div>
 
-    const data = await response.json();
-    updateUI(data.data.user[0]);
-    console.log("Data: ", data.data.user[0]);
-  } catch (error) {
-    console.error("Profile loading error:", error);
-  }
-}
+    <main class="main-content">
 
-function updateUI(userData) {
-  document.querySelector(
-    "#welcome-message"
-  ).textContent = `Hey ${userData.login}, Welcome back!`;
-  document.querySelector(
-    "#full-name"
-  ).textContent = `${userData.firstName} ${userData.lastName}`;
-  document.querySelector(
-    "#level-display"
-  ).textContent = `Your current level is: ${userData.levels[0]?.amount || "0"}`;
+    
+    <div id="dashboard" class="dashboard">
+    <section class="card large skills-card">
+    <h2>Skills</h2>
+    <svg id="skillsGraph" width="100%" height="300"></svg>
+    </section>
+    
+    
+    <section class="card">
+    <h2>Transaction History</h2>
 
-  const auditRatioElement = document.querySelector("#audit-ratio");
-  const auditRatioNote = document.querySelector("#audit-ratio-note");
-  const userAuditRatio = userData.auditRatio?.toFixed(1);
+    <ul>
+    <li>
+    ${user.lastProject[0]?.object.name}  
+    <span style="color: ${user.lastProject[0]?.amount < 0 ? "red" : "green"};">
+    ${formatting(user.lastProject[0]?.amount)}
+    </span>
+    </li>
+    <li>
+    ${user.lastProject[1]?.object.name}  
+    <span style="color: ${user.lastProject[1]?.amount < 0 ? "red" : "green"};">
+    ${formatting(user.lastProject[1]?.amount)}
+    </span>
+    </li>
+    <li>
+    ${user.lastProject[2]?.object.name}  
+    <span style="color: ${user.lastProject[2]?.amount < 0 ? "red" : "green"};">
+    ${formatting(user.lastProject[2]?.amount)}
+    </span>
+    </li>
+    <li>
+    ${user.lastProject[3]?.object.name}  
+    <span style="color: ${user.lastProject[3]?.amount < 0 ? "red" : "green"};">
+    ${formatting(user.lastProject[3]?.amount)}
+    </span>
+    </li>
+    <li>
+    ${user.lastProject[4]?.object.name}  
+    <span style="color: ${user.lastProject[4]?.amount < 0 ? "red" : "green"};">
+    ${formatting(user.lastProject[4]?.amount)}
+    </span>
+    </li>
+        <li>
+    ${user.lastProject[5]?.object.name}  
+    <span style="color: ${user.lastProject[5]?.amount < 0 ? "red" : "green"};">
+    ${formatting(user.lastProject[5]?.amount)}
+    </span>
+    </li>
 
-  auditRatioElement.textContent = userAuditRatio;
-  updateAuditRatioStyle(userAuditRatio, auditRatioElement, auditRatioNote);
+    </ul>
+    </section>
+    
+    <section id="audit-chart" class="card">
+    <h2><span>Audits Ratio</span></h2>
+            <div class="audit-ratio">
+          <strong>Ratio: ${user.info.auditRatio?.toFixed(1) || "N/A"}</strong>
+        </div>
+    <div class="chart-container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+      <div id="circleChart" style="display: flex; justify-content: center;"></div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <span style="color: #10b981;">Done: ${formatting(
+            user.info.totalUp
+          )} &uarr;</span>
+        </div>
+        <div class="legend-item">
+          <span style="color: #ef4444;">Received: ${formatting(
+            user.info.totalDown
+          )} 	&darr;</span>
+        </div>
 
-  document.querySelector("#totaldown").textContent = formatting(
-    userData.totalDown
-  );
-  document.querySelector("#totalup").textContent = formatting(userData.totalUp);
+      </div>
+    </div>
+    </section>
+    </div>
+    </main>
+    </div>
+  `;
 
-  const skills = [...userData.skills];
-  const skillChart = generateSkillChart(skills);
-  const circleChart = generateCircleChart(userData.totalUp, userData.totalDown);
-
-  document.querySelector(".skills-set").innerHTML = "";
-  document.querySelector(".skills-set").appendChild(skillChart);
-  document.querySelector(".circle").innerHTML = "";
-  document.querySelector(".circle").appendChild(circleChart);
-
-  generateTopProjects(userData.modules);
-}
-
-function updateAuditRatioStyle(ratio, element, noteElement) {
-  console.log("Ratio: ", ratio);
-
-  if (!ratio) {
-    noteElement.display = "none";
-  } else if (ratio >= 1.3) {
-    element.style.color = "green";
-    noteElement.textContent = "Perfect";
-    noteElement.style.color = "green";
-  } else if (ratio < 1.3 && ratio >= 1) {
-    element.style.color = "orange";
-    noteElement.textContent = "You can do better";
-    noteElement.style.color = "orange";
+  body.innerHTML = profileDiv;
+  document.body.className = "user-page";
+  if (user.info.totalUp != null || user.info.campus != null) {
+    drawCircleChart(user);
+    drawSkillsGraph(user.skills);
   } else {
-    element.style.color = "crimson";
-    noteElement.textContent = "Careful buddy";
-    noteElement.style.color = "crimson";
+    document.getElementById("dashboard").innerHTML = `<div class="alert-box">
+    <div>
+    Your profile is missing some information. Complete the remaining fields to keep progressing on your tasks!
+    </div>
+    </div>`;
   }
+
+  document.getElementById("logoutBtn").addEventListener("click", logout);
 }
+
+async function graphQlUser() {
+  const response = await fetch(API_Global, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("hasura-jwt-token")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query: query }),
+  });
+  if (!response.ok) {
+    alert("Error fetching user data. Please try again later.");
+  }
+
+  const data = await response.json();
+  //   console.log("User Data:", data);
+  //   console.log(data.data.transaction);
+
+  if (data.errors) {
+    logout();
+  }
+  generalUserInfos(data);
+}
+
+function generalUserInfos(data) {
+  user.info = data.data.user[0];
+  user.level = user.info.levels[0]?.amount;
+  user.totalXp = totalXp(data.data.transaction);
+  user.lastProject = data.data.user[0].modules;
+  user.skills = data.data.user[0].skills;
+  user.skills.sort((a, b) => {
+    return b.amount - a.amount;
+  });
+
+  user.transaction = data.data.transaction;
+}
+
+export { userPage };
