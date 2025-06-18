@@ -40,9 +40,6 @@ async function userPage() {
     <label>Total XP:</label>
     <span>${
       formatting(user.totalXp) || "0 B"
-      //   user.totalXp > 1000
-      //     ? Math.round(user.totalXp / 1000) + " kB"
-      //     : Math.trunc(user.totalXp) + " B"
     }</span>
     </div>
     
@@ -69,47 +66,20 @@ async function userPage() {
     
     
     <section class="card">
-    <h2>Transaction History</h2>
-
-    <ul>
-    <li>
-    ${user.lastProject[0]?.object.name}  
-    <span style="color: ${user.lastProject[0]?.amount < 0 ? "red" : "green"};">
-    ${formatting(user.lastProject[0]?.amount)}
-    </span>
-    </li>
-    <li>
-    ${user.lastProject[1]?.object.name}  
-    <span style="color: ${user.lastProject[1]?.amount < 0 ? "red" : "green"};">
-    ${formatting(user.lastProject[1]?.amount)}
-    </span>
-    </li>
-    <li>
-    ${user.lastProject[2]?.object.name}  
-    <span style="color: ${user.lastProject[2]?.amount < 0 ? "red" : "green"};">
-    ${formatting(user.lastProject[2]?.amount)}
-    </span>
-    </li>
-    <li>
-    ${user.lastProject[3]?.object.name}  
-    <span style="color: ${user.lastProject[3]?.amount < 0 ? "red" : "green"};">
-    ${formatting(user.lastProject[3]?.amount)}
-    </span>
-    </li>
-    <li>
-    ${user.lastProject[4]?.object.name}  
-    <span style="color: ${user.lastProject[4]?.amount < 0 ? "red" : "green"};">
-    ${formatting(user.lastProject[4]?.amount)}
-    </span>
-    </li>
+  <h2>Transactions History</h2>
+  <ul>
+    ${user.lastProject
+      .map(
+        (project) => `
         <li>
-    ${user.lastProject[5]?.object.name}  
-    <span style="color: ${user.lastProject[5]?.amount < 0 ? "red" : "green"};">
-    ${formatting(user.lastProject[5]?.amount)}
-    </span>
-    </li>
-
-    </ul>
+          ${project?.object.name}
+          <span style="color: ${project?.amount < 0 ? "red" : "green"};">
+            ${formatting(project?.amount)}
+          </span>
+        </li>`
+      )
+      .join("")}
+  </ul>
     </section>
     
     <section id="audit-chart" class="card">
@@ -138,9 +108,9 @@ async function userPage() {
     </main>
     </div>
   `;
-
+  body.innerHTML = "";
+  
   body.innerHTML = profileDiv;
-  document.body.className = "user-page";
   if (user.info.totalUp != null || user.info.campus != null) {
     drawCircleChart(user);
     drawSkillsGraph(user.skills);

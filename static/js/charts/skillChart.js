@@ -41,9 +41,17 @@ function drawSkillsGraph(skillsData = user.skills) {
     label.setAttribute("fill", "#475569");
     label.textContent = skill.type.replace("skill_", "");
 
+    const test = document.createElementNS(svgNamespace, "svg");
+    test.setAttribute("width", 100)
+    test.setAttribute("height", 100)
+    test.setAttribute("fill", "red")
+
+
     svg.appendChild(rect);
+    
     svg.appendChild(text);
     svg.appendChild(label);
+    svg.appendChild(test);
   });
 }
 

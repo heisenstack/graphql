@@ -24,7 +24,7 @@ function loginPage() {
 
 async function loginHandler() {
   if (username.value.length == 0 || password.value.length == 0) {
-    error.innerHTML = "You Write Nothing in Username/Email or Password";
+    error.innerHTML = "Username of Password can't be empty";
     return;
   }
 
@@ -51,7 +51,6 @@ async function login() {
     });
 
     if (!response.ok) {
-      alert("cdasada");
       const json = await response.json();
       error.innerHTML = json.error || "Invalid credentials, please try again!";
       return;
