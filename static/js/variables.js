@@ -29,7 +29,9 @@ const query = `{
     }
     skills:transactions(distinct_on: type 
     where: { type: { _like: "skill_%" } }
-    order_by: [{ type: asc }, { amount: desc }]){
+    order_by: [{ type: asc }, { amount: desc }]
+    
+    ){
     type
     amount
     }

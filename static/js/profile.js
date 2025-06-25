@@ -11,7 +11,6 @@ const body = document.body;
 async function userPage() {
   const success = await graphQlUser();
   if (!success) return;
-  // console.log("user", user);
 
   profileDiv = `
     <div class="app-container">
@@ -60,14 +59,14 @@ async function userPage() {
 
     
     <div id="dashboard" class="dashboard">
-    <section class="card large skills-card">
+    <section class="card skills-card">
     <h2>Skills</h2>
-    <svg id="skillsGraph" width="100%" height="300"></svg>
+    <svg id="skillsGraph"></svg>
     </section>
     
     
     <section class="card">
-  <h2>Transactions History</h2>
+  <h2>Last activity</h2>
   <ul>
     ${user.lastProject
       .map(
@@ -86,7 +85,7 @@ async function userPage() {
     <section id="audit-chart" class="card">
     <h2><span>Audits Ratio</span></h2>
             <div class="audit-ratio">
-          <strong>Ratio: ${user.info.auditRatio?.toFixed(1) || "N/A"}</strong>
+          <strong>Ratio: ${user.info.auditRatio?.toFixed(2) || "N/A"}</strong>
         </div>
     <div class="chart-container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
       <div id="circleChart" style="display: flex; justify-content: center;"></div>
@@ -140,7 +139,7 @@ async function graphQlUser() {
     if (!response.ok) {
       body.innerHTML = `<div class="alert-box">
       <div>
-      An error occurred while fetching user data. Please check your internet connection or try again later.
+      An error occurred while fetching user data. Please try again later.
       </div>
       </div>`;
       logout();
@@ -177,6 +176,8 @@ function generalUserInfos(data) {
   });
 
   user.transaction = data.data.transaction;
+  console.log(data);
+  
 }
 
 export { userPage };
