@@ -116,12 +116,6 @@ body.login-page {
 }
 
 
-#loginId.loading {
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-
 @media screen and (max-width: 480px) {
   .login-container {
     padding: 32px 24px;

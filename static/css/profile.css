@@ -178,6 +178,7 @@ body {
 .card.large,
 .card.skills-card {
   grid-column: 1 / -1;
+  
 }
 .card.large {
   overflow-y: scroll;
@@ -236,6 +237,7 @@ body {
 
 .card.skills-card {
   overflow: hidden;
+  overflow-x: auto;
 }
 
 #skillsGraph {
@@ -243,6 +245,7 @@ body {
   height: auto;
   min-height: 320px;
   border-radius: 12px;
+  min-width: 800px; 
 }
 
 .alert-box {
@@ -253,7 +256,7 @@ body {
   font-family: 'Inter', sans-serif;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  justify-content: center;
   max-width: 800px;
   margin: 32px auto;
   box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);

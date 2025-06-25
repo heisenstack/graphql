@@ -1,5 +1,6 @@
 const API_LOGIN = "https://learn.zone01oujda.ma/api/auth/signin";
-const API_Global = "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
+const API_Global =
+  "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
 
 const query = `{
     user {

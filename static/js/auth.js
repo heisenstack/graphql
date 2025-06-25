@@ -10,12 +10,14 @@ let loginDiv = `<div class="login-container">
 </div>`;
 
 const body = document.body;
+
 let username, password, loginBtn, error;
 
 function loginPage() {
   body.innerHTML = loginDiv;
   document.body.className = "login-page";
   username = document.getElementById("username-email");
+
   password = document.getElementById("password");
   loginBtn = document.getElementById("loginId");
   error = document.getElementById("error");
@@ -29,7 +31,7 @@ async function loginHandler() {
   }
 
   const token = await login();
-  if (token && token !== "User does not exist or password incorrect") {
+  if (token) {
     localStorage.setItem("hasura-jwt-token", token);
     userPage();
   }
@@ -40,6 +42,7 @@ async function login() {
   const passwordInput = password.value;
 
   const credentials = btoa(`${usernameInput}:${passwordInput}`);
+
 
   try {
     const response = await fetch(API_LOGIN, {
@@ -61,7 +64,10 @@ async function login() {
       return token;
     }
   } catch (err) {
-    return "User does not exist or password incorrect";
+    console.log("Error during login:", err);
+    
+    error.innerHTML = err || "Error during login, please try again!";
+    return;
   }
 }
 

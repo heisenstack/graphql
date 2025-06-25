@@ -5,12 +5,15 @@ import { formatting, totalXp } from "./utils.js";
 import { API_Global, query } from "./variables.js";
 
 let user = {};
+let profileDiv = "";
 const body = document.body;
 
 async function userPage() {
-  await graphQlUser();
+  const success = await graphQlUser();
+  if (!success) return;
+  // console.log("user", user);
 
-  let profileDiv = `
+  profileDiv = `
     <div class="app-container">
     <div class="sidebar">
     <div class="sidebar-header">
@@ -36,14 +39,12 @@ async function userPage() {
     <span>${user.info.campus || ""}</span>
     </div>
     
-    <div class="user-info-item highlight">
+    <div class="user-info-item">
     <label>Total XP:</label>
-    <span>${
-      formatting(user.totalXp) || "0 B"
-    }</span>
+    <span>${formatting(user.totalXp) || "0 B"}</span>
     </div>
     
-    <div class="user-info-item highlight">
+    <div class="user-info-item">
     <label>Current Level:</label>
     <span>${user.level || ""}</span>
     </div>
@@ -109,7 +110,7 @@ async function userPage() {
     </div>
   `;
   body.innerHTML = "";
-  
+
   body.innerHTML = profileDiv;
   if (user.info.totalUp != null || user.info.campus != null) {
     drawCircleChart(user);
@@ -126,26 +127,43 @@ async function userPage() {
 }
 
 async function graphQlUser() {
-  const response = await fetch(API_Global, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("hasura-jwt-token")}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query: query }),
-  });
-  if (!response.ok) {
-    alert("Error fetching user data. Please try again later.");
-  }
+  try {
+    const response = await fetch(API_Global, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("hasura-jwt-token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+    });
 
-  const data = await response.json();
-  //   console.log("User Data:", data);
-  //   console.log(data.data.transaction);
+    if (!response.ok) {
+      body.innerHTML = `<div class="alert-box">
+      <div>
+      An error occurred while fetching user data. Please check your internet connection or try again later.
+      </div>
+      </div>`;
+      logout();
+      return false;
+    }
 
-  if (data.errors) {
-    logout();
+    const data = await response.json();
+
+    if (data.errors) {
+      logout();
+      return false;
+    }
+
+    generalUserInfos(data);
+    return true;
+  } catch (err) {
+    body.innerHTML = `<div class="alert-box">
+    <div>
+    An error occurred while fetching user data. Please check your internet connection or try again later.
+    </div>
+    </div>`;
+    return false;
   }
-  generalUserInfos(data);
 }
 
 function generalUserInfos(data) {
