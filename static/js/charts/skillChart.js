@@ -4,6 +4,7 @@ function drawSkillsGraph(skillsData = user.skills) {
 
   const width = 1200;
   const height = 350;
+  
   const barWidth = width / skillsData.length;
   const maxAmount = Math.max(...skillsData.map((skill) => skill.amount));
   const svgNamespace = "http://www.w3.org/2000/svg";
@@ -14,7 +15,6 @@ function drawSkillsGraph(skillsData = user.skills) {
 
   skillsData.forEach((skill, index) => {
     const barHeight = (skill.amount / maxAmount) * (height - 50); 
-    console.log(skill.amount,barHeight);
     
     const rect = document.createElementNS(svgNamespace, "rect");
     rect.setAttribute("x", index * barWidth + 10);
@@ -23,6 +23,8 @@ function drawSkillsGraph(skillsData = user.skills) {
     rect.setAttribute("height", barHeight);
     rect.setAttribute("fill", "#10b981");
     rect.setAttribute("rx", "12");
+
+
 
     const text = document.createElementNS(svgNamespace, "text");
     text.setAttribute("x", index * barWidth + barWidth / 2);

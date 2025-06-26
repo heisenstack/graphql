@@ -21,7 +21,9 @@ function generateCircleChart(totalUp, totalDown) {
 
   const upPercentage = (totalUp / total) * circumference;
   const downPercentage = (totalDown / total) * circumference;
-
+  console.log("circum: ", circumference);
+  
+  
   const bgCircle = document.createElementNS(svgNamespace, "circle");
   bgCircle.setAttribute("cx", 90);
   bgCircle.setAttribute("cy", 90);
@@ -29,7 +31,7 @@ function generateCircleChart(totalUp, totalDown) {
   bgCircle.setAttribute("stroke", "#ddd");
   bgCircle.setAttribute("stroke-width", 20);
   bgCircle.setAttribute("fill", "transparent");
-  // svg.appendChild(bgCircle);
+  svg.appendChild(bgCircle);
 
   const downCircle = document.createElementNS(svgNamespace, "circle");
   downCircle.setAttribute("cx", 90);
@@ -42,8 +44,9 @@ function generateCircleChart(totalUp, totalDown) {
   downCircle.setAttribute(
     "stroke-dasharray",
     `${downPercentage} ${circumference - downPercentage}`
+
   );
-  downCircle.setAttribute("stroke-dashoffset", 0);
+  downCircle.setAttribute("stroke-dashoffset",0);
   svg.appendChild(downCircle);
 
   const upCircle = document.createElementNS(svgNamespace, "circle");
@@ -55,8 +58,9 @@ function generateCircleChart(totalUp, totalDown) {
   upCircle.setAttribute("fill", "transparent");
 
   upCircle.setAttribute(
-    "stroke-dasharray",
+    "stroke-dasharray", 
     `${upPercentage} ${circumference - upPercentage}`
+
   );
   upCircle.setAttribute("stroke-dashoffset", -downPercentage);
   svg.appendChild(upCircle);

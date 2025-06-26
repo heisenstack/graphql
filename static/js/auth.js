@@ -33,6 +33,7 @@ async function loginHandler() {
   const token = await login();
   if (token) {
     localStorage.setItem("hasura-jwt-token", token);
+    location.reload();
     userPage();
   }
 }
