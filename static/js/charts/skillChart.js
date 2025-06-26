@@ -2,7 +2,7 @@ function drawSkillsGraph(skillsData = user.skills) {
   const svg = document.getElementById("skillsGraph");
   svg.innerHTML = "";
 
-  const width = 1200;
+  const width = 1300;
   const height = 350;
   
   const barWidth = width / skillsData.length;
